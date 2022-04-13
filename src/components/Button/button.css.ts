@@ -1,33 +1,22 @@
-import { style, styleVariants } from '@vanilla-extract/css';
 import { recipe, RecipeVariants } from '@vanilla-extract/recipes';
-import { vars } from '../../themes/theme.css';
+import { themeVars } from '../../styles';
 
-const { colour, borderRadius, space } = vars;
+const { colour, borderRadius } = themeVars;
 
-export const buttonStyle = style({
-  backgroundColor: colour.brand,
+const base = {
   border: 0,
   borderRadius: borderRadius.button,
   color: colour.white,
   cursor: 'pointer',
   display: 'flex',
   lineHeight: 1,
-  padding: space[1],
-});
+  ':hover': {
+    opacity: 0.65,
+  },
+};
 
 export const buttonStyles = recipe({
-  base: {
-    border: 0,
-    borderRadius: borderRadius.button,
-    color: colour.white,
-    cursor: 'pointer',
-    display: 'flex',
-    lineHeight: 1,
-    ':hover': {
-      opacity: 0.65,
-    },
-  },
-
+  base,
   variants: {
     colour: {
       neutral: { background: colour.gray },
@@ -46,9 +35,9 @@ export const buttonStyles = recipe({
       accent: { background: colour.blue },
     },
     size: {
-      small: { padding: 12 },
-      medium: { padding: 16 },
-      large: { padding: 24 },
+      small: { padding: '.5em 1em' },
+      medium: { padding: '1em 2em' },
+      large: { padding: '1.5em 3em' },
     },
     rounded: {
       true: { borderRadius: borderRadius.round },
@@ -74,8 +63,13 @@ export const buttonStyles = recipe({
   },
 });
 
-export const buttonVariants = styleVariants({
-  primary: [buttonStyles({ colour: 'brand', size: 'large' })],
+export const buttonVariants = recipe({
+  variants: {
+    primary: {
+      false: buttonStyles(),
+      true: buttonStyles({ colour: 'brand', size: 'large' }),
+    },
+  },
 });
 
-export type ButtonVariants = RecipeVariants<typeof buttonStyles>;
+export type ButtonVariants = RecipeVariants<typeof buttonVariants>;

@@ -19,11 +19,8 @@ export default {
     size: {
       type: String,
       validator: function (value) {
-        return ['small', 'medium', 'large'].indexOf(value) !== -1;
+        return ['small', 'medium', 'large'].includes(value);
       },
-    },
-    backgroundColor: {
-      type: String,
     },
   },
 
@@ -32,22 +29,13 @@ export default {
   setup(props, { emit }) {
     props = reactive(props);
     return {
-      classes: computed(() => ({
-        'storybook-button': true,
-        'storybook-button--primary': props.primary,
-        'storybook-button--secondary': !props.primary,
-        [`storybook-button--${props.size || 'medium'}`]: true,
-      })),
-      style: computed(() => ({
-        backgroundColor: props.backgroundColor,
-      })),
       styles: computed(() => {
-        if (props.primary) return buttonVariants.primary;
-        return buttonStyles({size: props.size });
+        if (props.primary) return buttonStyles({ colour: 'brand', size: 'large' });
+        return buttonStyles({ size: props.size });
       }),
       onClick() {
         emit('click');
-      }
+      },
     };
   },
 };
